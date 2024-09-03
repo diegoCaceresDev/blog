@@ -1,0 +1,30 @@
+/* Añade márgenes a los elementos del formulario */
+mat-form-field {
+  margin-bottom: 16px; /* Ajusta el margen inferior de los campos de formulario */
+}
+
+button {
+  margin-top: 16px; /* Ajusta el margen superior del botón */
+}
+
+/* Alinea el mat-card al centro de la página */
+mat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 400px; /* Ancho máximo del card */
+  margin: 100px auto; /* Centra el card horizontalmente */
+  padding: 16px; /* Padding interno del card */
+  border: 1px solid #e0e0e0; /* Borde con un color gris claro */
+  border-radius: 8px; /* Bordes redondeados */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+}
+
+/* Ajusta el tamaño del mat-card-title */
+mat-card-title {
+  margin-bottom: 16px; /* Margen inferior del título del card */
+}
+
+mat-form-field {
+  width: 100%;
+}

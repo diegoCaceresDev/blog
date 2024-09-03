@@ -1,0 +1,55 @@
+<h1>Welcome {{ userName }} {{ userLastName }}</h1>
+
+<h2>Create a Post</h2>
+<form [formGroup]="postForm" (ngSubmit)="createPost()">
+  <mat-form-field appearance="fill">
+    <mat-label>Title</mat-label>
+    <input matInput formControlName="title" />
+    <mat-error *ngIf="postForm.get('title')?.hasError('required')">
+      Title is required
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="fill">
+    <mat-label>Content</mat-label>
+    <textarea matInput formControlName="content" rows="4"></textarea>
+    <mat-error *ngIf="postForm.get('content')?.hasError('required')">
+      Content is required
+    </mat-error>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" type="submit">Create Post</button>
+</form>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title><h2>Posts</h2></mat-card-title>
+    <mat-card-subtitle>
+      <mat-form-field>
+        <mat-select
+          [(value)]="selectedOption"
+          (selectionChange)="onSelectionChange($event.value)"
+        >
+          <mat-option value="all">Ver todos los posts</mat-option>
+          <mat-option value="user">Ver mis posts</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <ul>
+      <li *ngFor="let post of posts" class="post-item">
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.content }}</p>
+        <button
+          *ngIf="post.author?.id === userId"
+          mat-icon-button
+          color="warn"
+          (click)="deletePost(post.id!)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </li>
+    </ul>
+  </mat-card-content>
+</mat-card>

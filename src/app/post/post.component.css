@@ -1,0 +1,132 @@
+/* Estilo general del componente */
+:host {
+  display: block;
+  padding: 16px;
+  max-width: 800px;
+  margin: auto;
+}
+
+/* Estilos del formulario */
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Estilo del botón */
+button {
+  margin-top: 16px;
+}
+
+/* Estilo de la lista de posts */
+mat-list {
+  margin-top: 16px;
+}
+
+mat-list-item {
+  margin-bottom: 16px;
+}
+
+mat-card {
+  padding: 16px;
+  background: #f9f9f9;
+  margin-bottom: 16px;
+}
+
+/* Títulos de posts */
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Contenido de posts */
+mat-card-content {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+/* Asegúrate de añadir padding y margin a los cards */
+.post-card {
+  margin: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Añade algo de espaciado dentro del card */
+mat-card-header {
+  background-color: #f5f5f5;
+  padding: 16px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Puedes cambiar el color de fondo del card-content si lo prefieres */
+mat-card-content {
+  background-color: #fff;
+  padding: 16px;
+}
+
+/* Estilo para el título */
+mat-card-title {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Estilo para el estado válido */
+.mat-form-field.mat-form-field-should-float.ng-valid .mat-form-field-wrapper {
+  border-color: green; /* Color para el estado válido */
+}
+
+/* Estilo para el estado inválido */
+.mat-form-field.mat-form-field-should-float.ng-invalid .mat-form-field-wrapper {
+  border-color: red; /* Color para el estado inválido */
+}
+
+/* Estilos generales para el contenido del card */
+mat-card-content {
+  padding: 16px;
+}
+
+/* Estilos para la lista de posts */
+ul {
+  list-style-type: none; /* Elimina los puntos de la lista */
+  padding: 0;
+  margin: 0;
+}
+
+/* Estilos para cada elemento de la lista */
+.post-item {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 16px;
+  padding: 16px;
+  position: relative;
+  background-color: #fff;
+}
+
+/* Estilos para el título del post */
+.post-item h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+/* Estilos para el contenido del post */
+.post-item p {
+  margin: 8px 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Estilos para el botón de eliminación */
+.post-item button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+/* Estilo del botón de eliminación al pasar el ratón */
+.post-item button:hover {
+  background-color: #f5f5f5;
+}
