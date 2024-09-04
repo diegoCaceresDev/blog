@@ -2,11 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { RegisterDto } from './models/register.dto';
-import { LoginDto } from './models/login.dto';
-import { CreatePostDto } from './models/create-post.dto';
-import { Post } from './models/post.model';
-import { User } from './models/user.model';
+import { RegisterDto } from '../models/register.dto';
+import { LoginDto } from '../models/login.dto';
+import { CreatePostDto } from '../models/create-post.dto';
+import { Post } from '../models/post.model';
+import { User } from '../models/user.model';
 
 interface TokenResponse {
   token: string;
@@ -26,6 +26,15 @@ export class ApiService {
 
   constructor(private http: HttpClient) {
     const token = localStorage.getItem('token');
+    this.checkToken(token);
+  }
+
+  private getAuthHeaders(): HttpHeaders {
+    const token = localStorage.getItem('token');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    });
   }
 
   register(registerData: any): Observable<any> {
@@ -58,13 +67,17 @@ export class ApiService {
       );
   }
 
-  createPost(createPostDto: CreatePostDto, token: string): Observable<Post> {
-    return this.http.post<Post>(`${this.apiUrl}/posts`, createPostDto, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }),
-    });
+  createPost(createPostDto: CreatePostDto): Observable<Post> {
+    return this.http
+      .post<Post>(`${this.apiUrl}/posts`, createPostDto, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Create post error:', error);
+          return throwError(error);
+        })
+      );
   }
 
   getAllPosts(): Observable<Post[]> {
@@ -73,19 +86,30 @@ export class ApiService {
     });
   }
 
-  getUserData(token: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/me`, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      }),
-    });
+  getUserData(): Observable<User> {
+    return this.http
+      .get<User>(`${this.apiUrl}/users/me`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Get user data error:', error);
+          return throwError(error);
+        })
+      );
   }
 
   getUserByEmail(email: string): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/email/${email}`, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
-    });
+    return this.http
+      .get<User>(`${this.apiUrl}/users/email/${email}`, {
+        headers: this.getAuthHeaders(),
+      })
+      .pipe(
+        catchError((error) => {
+          console.error('Get user by email error:', error);
+          return throwError(error);
+        })
+      );
   }
 
   logout(): void {
@@ -105,7 +129,7 @@ export class ApiService {
     return this.http
       .post<ValidationResponse>(
         `${this.apiUrl}/auth/validate-token`,
-        { token }, // Enviar el token en el cuerpo de la solicitud
+        { token },
         {
           headers: new HttpHeaders({
             'Content-Type': 'application/json',
@@ -125,7 +149,7 @@ export class ApiService {
   }
 
   // Método para actualizar el estado de autenticación
-  updateAuthenticationStatus(isAuthenticated: boolean): void {
+  private updateAuthenticationStatus(isAuthenticated: boolean): void {
     this.isAuthenticatedSubject.next(isAuthenticated);
   }
 }

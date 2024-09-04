@@ -4,7 +4,8 @@ import { Observable } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
-import { ApiService } from '../../api.service';
+import { ApiService } from '../../services/api.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private apiService: ApiService, // Usa ApiService aquí
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.isAuthenticated$ = this.apiService.isAuthenticated$; // Usa isAuthenticated$ de ApiService
   }
@@ -30,5 +32,9 @@ export class NavbarComponent implements OnInit {
   logout(): void {
     this.apiService.logout(); // Usa logout de ApiService
     this.router.navigate(['/login']);
+    this.snackBar.open('Haz finalizado tu sesion exitosamente. ', 'Cerrar', {
+      duration: 5000,
+      panelClass: ['green-snackbar'],
+    });
   }
 }

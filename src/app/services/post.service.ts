@@ -21,18 +21,35 @@ export class PostService {
     });
   }
 
-  getAllPosts(): Observable<Post[]> {
-    return this.http.get<Post[]>(`${this.apiUrl}/posts`, {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  getAllPosts(
+    page: number = 1,
+    limit: number = 10,
+    token: string // Añadido para recibir el token
+  ): Observable<{ posts: Post[]; total: number }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
+    return this.http.get<{ posts: Post[]; total: number }>(
+      `${this.apiUrl}/posts?page=${page}&limit=${limit}`,
+      { headers } // Incluye los encabezados con el token
+    );
   }
 
-  getUserPosts(userId: number, token: string): Observable<Post[]> {
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<Post[]>(`${this.apiUrl}/posts/user/${userId}`, {
-      headers,
+  getUserPosts(
+    userId: number,
+    page: number = 1,
+    limit: number = 10,
+    token: string // Añadido para recibir el token
+  ): Observable<{ posts: Post[]; total: number }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
     });
+    return this.http.get<{ posts: Post[]; total: number }>(
+      `${this.apiUrl}/posts/user/${userId}?page=${page}&limit=${limit}`,
+      { headers } // Incluye los encabezados con el token
+    );
   }
+
   validateToken(): Observable<{ valid: boolean }> {
     const token = localStorage.getItem('token'); // Recupera el token del localStorage
 

@@ -20,8 +20,9 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { Post } from '../models/post.model';
 import { MatIconModule } from '@angular/material/icon'; // Asegúrate de importar MatIconModule
-import { ApiService } from '../api.service';
+import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
+import { MatPaginatorModule } from '@angular/material/paginator'; // Importa MatPaginatorModule
 
 @Component({
   selector: 'app-post',
@@ -37,18 +38,23 @@ import { User } from '../models/user.model';
     MatSelectModule,
     MatOptionModule,
     MatIconModule,
+    MatPaginatorModule,
   ],
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css'],
 })
 export class PostComponent implements OnInit {
   posts: Post[] = [];
+  totalPosts: number = 0;
+
   postForm!: FormGroup;
   token: string = '';
   userId: number = 0;
   userName: string = '';
   userLastName: string = '';
   selectedOption: string = 'all';
+  page: number = 1;
+  limit: number = 10;
 
   constructor(
     private postService: PostService,
@@ -82,7 +88,7 @@ export class PostComponent implements OnInit {
   }
 
   getUserData(): void {
-    this.apiService.getUserData(this.token).subscribe(
+    this.apiService.getUserData().subscribe(
       (user: User) => {
         this.userName = user.nombre;
         this.userLastName = user.apellido;
@@ -95,18 +101,22 @@ export class PostComponent implements OnInit {
 
   getPosts(): void {
     if (this.selectedOption === 'user' && this.userId) {
-      this.postService.getUserPosts(this.userId, this.token).subscribe(
-        (data: Post[]) => {
-          this.posts = data;
-        },
-        (error) => {
-          console.error('Error al obtener los posts del usuario', error);
-        }
-      );
+      this.postService
+        .getUserPosts(this.userId, this.page, this.limit, this.token)
+        .subscribe(
+          (data) => {
+            this.posts = data.posts;
+            this.totalPosts = data.total;
+          },
+          (error) => {
+            console.error('Error al obtener los posts del usuario', error);
+          }
+        );
     } else {
-      this.postService.getAllPosts().subscribe(
-        (data: Post[]) => {
-          this.posts = data;
+      this.postService.getAllPosts(this.page, this.limit, this.token).subscribe(
+        (data) => {
+          this.posts = data.posts;
+          this.totalPosts = data.total;
         },
         (error) => {
           console.error('Error al obtener todos los posts', error);
@@ -116,7 +126,15 @@ export class PostComponent implements OnInit {
   }
 
   onSelectionChange(value: string): void {
+    console.log('Selected Option:', value);
     this.selectedOption = value;
+    this.page = 1; // Reset page when changing the filter
+    this.getPosts();
+  }
+
+  onPageChange(event: any): void {
+    this.page = event.pageIndex + 1;
+    this.limit = event.pageSize;
     this.getPosts();
   }
 

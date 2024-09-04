@@ -130,3 +130,18 @@ ul {
 .post-item button:hover {
   background-color: #f5f5f5;
 }
+
+.post-container {
+  position: relative;
+  padding: 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}

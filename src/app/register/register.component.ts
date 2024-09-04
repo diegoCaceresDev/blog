@@ -8,7 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ApiService } from '../api.service';
+import { ApiService } from '../services/api.service';
 import { RegisterDto } from '../models/register.dto';
 
 @Component({
