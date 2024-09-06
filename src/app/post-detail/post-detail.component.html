@@ -52,9 +52,9 @@
         <p>{{ comment.content }}</p>
         <small>Autor: {{ comment.author?.nombre || "Anónimo" }}</small>
         <small class="comment-date">{{
-          comment.createdAt | date : "short"
+          getRelativeTime(comment.createdAt)
         }}</small>
-        <!-- Mostrar fecha y hora -->
+        <!-- Mostrar fecha y hora en formato relativo -->
       </div>
     </mat-card-content>
   </div>

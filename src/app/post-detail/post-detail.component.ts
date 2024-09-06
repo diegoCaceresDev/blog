@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommentService } from '../services/comments.service';
+import { formatDistanceToNow } from 'date-fns'; // Importar date-fns
 
 @Component({
   selector: 'app-post-detail',
@@ -111,5 +112,10 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     // Desconectar del WebSocket al destruir el componente
     this.commentSocketService.disconnect();
+  }
+
+  // Método para obtener el tiempo relativo
+  getRelativeTime(date: Date): string {
+    return formatDistanceToNow(new Date(date), { addSuffix: true });
   }
 }
