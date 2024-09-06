@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { PostComponent } from './post/post.component';
 import { AuthGuard } from './auth.guard'; // Importa el AuthGuard
+import { PostDetailComponent } from './post-detail/post-detail.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -13,6 +14,7 @@ export const routes: Routes = [
     component: PostComponent,
     canActivate: [AuthGuard],
   },
+  { path: 'post/:id', component: PostDetailComponent },
 
   { path: '**', redirectTo: '/login' }, // Redirige cualquier ruta desconocida al login
   { path: '', redirectTo: '/login', pathMatch: 'full' }, // Ruta por defecto

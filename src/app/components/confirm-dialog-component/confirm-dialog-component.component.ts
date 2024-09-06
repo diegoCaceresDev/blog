@@ -1,15 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-confirm-dialog',
   standalone: true,
-  imports: [MatButtonModule, MatDialogModule], // Importa los módulos necesarios
+  imports: [MatButtonModule, MatDialogModule],
   template: `
-    <h1 mat-dialog-title>Confirmación</h1>
+    <h1 mat-dialog-title>{{ title }}</h1>
     <div mat-dialog-content>
-      <p>¿Estás seguro de que deseas crear este post?</p>
+      <p>{{ message }}</p>
     </div>
     <div mat-dialog-actions>
       <button mat-button (click)="onCancel()">Cancelar</button>
@@ -18,6 +18,10 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   `,
 })
 export class ConfirmDialogComponent {
+  @Input() title: string = 'Confirmación';
+  @Input() message: string =
+    '¿Estás seguro de que deseas realizar esta acción?';
+
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>) {}
 
   onConfirm(): void {

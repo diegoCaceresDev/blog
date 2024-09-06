@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar'; // Importar MatSnackB
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ApiService } from '../services/api.service';
+import { FooterComponent } from '../components/footer/footer.component';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +22,7 @@ import { ApiService } from '../services/api.service';
     MatButtonModule,
     ReactiveFormsModule,
     CommonModule,
+    FooterComponent,
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],
@@ -64,7 +66,7 @@ export class LoginComponent implements OnInit {
             (user) => {
               localStorage.setItem('userId', user.id.toString());
               this.snackBar.open('Login exitoso', 'Cerrar', {
-                duration: 25000,
+                duration: 5000,
                 panelClass: ['green-snackbar'],
               });
               this.router.navigate(['/dashboard']);

@@ -7,7 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -39,6 +39,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'; // Importa Mat
     MatOptionModule,
     MatIconModule,
     MatPaginatorModule,
+    RouterModule,
   ],
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css'],
@@ -126,7 +127,6 @@ export class PostComponent implements OnInit {
   }
 
   onSelectionChange(value: string): void {
-    console.log('Selected Option:', value);
     this.selectedOption = value;
     this.page = 1; // Reset page when changing the filter
     this.getPosts();
@@ -142,6 +142,10 @@ export class PostComponent implements OnInit {
     if (this.postForm.valid) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         panelClass: 'custom-dialog-container',
+        data: {
+          title: 'Crear Post',
+          message: '¿Estás seguro de que deseas crear este post?',
+        },
       });
 
       dialogRef.afterClosed().subscribe((result) => {

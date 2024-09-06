@@ -44,6 +44,17 @@
         <small
           >Author: {{ post.author?.nombre }} {{ post.author?.apellido }}</small
         >
+
+        <!-- Botón para ver detalles -->
+        <button
+          mat-raised-button
+          color="primary"
+          [routerLink]="['/post', post.id]"
+          class="details-button"
+        >
+          Ver Detalles
+        </button>
+
         <button
           *ngIf="post.author?.id === userId"
           mat-icon-button

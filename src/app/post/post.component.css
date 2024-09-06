@@ -145,3 +145,20 @@ ul {
   top: 8px;
   right: 8px;
 }
+/* Estilo para el botón en la esquina inferior derecha */
+.dashboard-button {
+  position: fixed; /* Fija el botón en la pantalla */
+  bottom: 16px; /* Ajusta la distancia desde el fondo */
+  right: 16px; /* Ajusta la distancia desde el borde derecho */
+  z-index: 1000; /* Asegura que el botón esté encima de otros elementos */
+}
+
+.details-button {
+  position: absolute; /* Posiciona el botón en relación con el contenedor */
+  bottom: 16px; /* Distancia desde el borde inferior del contenedor */
+  right: 16px; /* Distancia desde el borde derecho del contenedor */
+}
+
+.details-button {
+  margin: 0; /* Asegura que no haya márgenes adicionales */
+}

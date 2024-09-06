@@ -35,6 +35,14 @@ export class PostService {
     );
   }
 
+  getPostById(postId: number, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get(`${this.apiUrl}/posts/${postId}`, { headers });
+  }
+
   getUserPosts(
     userId: number,
     page: number = 1,
