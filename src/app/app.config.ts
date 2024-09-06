@@ -3,26 +3,17 @@ import { provideRouter } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { routes } from './app.routes';
 import { HttpClientModule } from '@angular/common/http';
-import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
-
-const token = localStorage.getItem('token') || '';
-
-// Configuración del Socket
-const config: SocketIoConfig = {
-  url: 'http://localhost:3000',
-  options: {
-    transports: ['websocket'],
-    query: {
-      token: token,
-    },
-  },
-};
+import { SocketIoModule } from 'ngx-socket-io';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
-    importProvidersFrom(SocketIoModule.forRoot(config)), // Proveedor de WebSocket
-
+    importProvidersFrom(
+      SocketIoModule.forRoot({
+        url: 'http://localhost:3000', // URL sin token
+        options: { transports: ['websocket'] }, // Sin token aquí
+      })
+    ),
     provideAnimationsAsync(),
     importProvidersFrom(HttpClientModule),
   ],

@@ -53,11 +53,13 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.token = localStorage.getItem('token') || 'no tengo el token';
-    // Conectar al WebSocket después de cargar el post y tener el token
+    const token = localStorage.getItem('token');
+    this.token = token !== null ? token : ''; // Garantizar que 'this.token' sea siempre una cadena
+
     if (this.token) {
-      this.commentSocketService.connect(); // El token ya está en el servicio
+      this.commentSocketService.connect(); // Conectar solo si el token está disponible
     }
+
     this.route.paramMap.subscribe((params) => {
       const postId = +params.get('id')!;
       this.loadPost(postId);
@@ -69,10 +71,16 @@ export class PostDetailComponent implements OnInit, OnDestroy {
       (post: Post) => {
         this.post = post;
         this.loadComments(postId); // Cargar los comentarios cuando el post esté disponible
-
-        this.commentSocketService.onCommentCreated().subscribe((newComment) => {
-          this.comments.push(newComment); // Añadir el nuevo comentario al array de comentarios
-        });
+        this.commentSocketService
+          .onCommentCreated()
+          .subscribe((newComment: Comment) => {
+            this.comments.unshift(newComment); // Añadir al inicio y ordenar
+            this.comments.sort(
+              (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime()
+            );
+          });
       },
       (error) => {
         console.error('Error fetching post:', error);

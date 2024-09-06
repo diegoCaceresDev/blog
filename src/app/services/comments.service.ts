@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { Comment } from '../models/comment.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class CommentService {
   constructor(private http: HttpClient) {}
 
   // Obtener comentarios por postId con el token en la cabecera
-  getCommentsByPostId(postId: number, token: string): Observable<any[]> {
+  getCommentsByPostId(postId: number, token: string): Observable<Comment[]> {
     const headers = { Authorization: `Bearer ${token}` };
     return this.http.get<any[]>(`${this.apiUrl}/post/${postId}`, {
       headers,

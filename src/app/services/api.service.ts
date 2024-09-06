@@ -7,6 +7,7 @@ import { LoginDto } from '../models/login.dto';
 import { CreatePostDto } from '../models/create-post.dto';
 import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
+import { CommentSocketService } from './comment-socket.service';
 
 interface TokenResponse {
   token: string;
@@ -24,8 +25,12 @@ export class ApiService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private webSocketService: CommentSocketService
+  ) {
     const token = localStorage.getItem('token');
+    this.checkToken(token); // Verifica el token al iniciar el servicio
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -57,6 +62,7 @@ export class ApiService {
           if (response.token) {
             localStorage.setItem('token', response.token);
             this.updateAuthenticationStatus(true);
+            this.webSocketService.connect(); // Reconectar WebSocket con el nuevo token
           }
         }),
         catchError((error) => {
@@ -114,6 +120,7 @@ export class ApiService {
   logout(): void {
     localStorage.removeItem('token');
     this.updateAuthenticationStatus(false);
+    this.webSocketService.disconnect(); // Desconectar WebSocket al hacer logout
   }
 
   checkToken(token: string | null): void {
