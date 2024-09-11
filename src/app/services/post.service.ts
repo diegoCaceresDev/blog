@@ -12,10 +12,11 @@ export class PostService {
 
   constructor(private http: HttpClient) {}
 
-  createPost(createPostDto: CreatePostDto, token: string): Observable<Post> {
-    return this.http.post<Post>(`${this.apiUrl}/posts`, createPostDto, {
+  createPost(formData: FormData): Observable<Post> {
+    const token = localStorage.getItem('token'); // Asegúrate de tener el token disponible
+
+    return this.http.post<Post>(`${this.apiUrl}/posts`, formData, {
       headers: new HttpHeaders({
-        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       }),
     });

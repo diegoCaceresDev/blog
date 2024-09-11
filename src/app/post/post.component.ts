@@ -47,6 +47,7 @@ import { MatPaginatorModule } from '@angular/material/paginator'; // Importa Mat
 export class PostComponent implements OnInit {
   posts: Post[] = [];
   totalPosts: number = 0;
+  selectedImage: File | null = null; // Para manejar la imagen seleccionada
 
   postForm!: FormGroup;
   token: string = '';
@@ -85,6 +86,7 @@ export class PostComponent implements OnInit {
     this.postForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
+      image: [''], // Campo para la imagen
     });
   }
 
@@ -138,6 +140,14 @@ export class PostComponent implements OnInit {
     this.getPosts();
   }
 
+  // Método para manejar la selección de archivos
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file; // Guarda la imagen seleccionada
+    }
+  }
+
   createPost(): void {
     if (this.postForm.valid) {
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -150,20 +160,28 @@ export class PostComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe((result) => {
         if (result) {
-          const newPost: Post = this.postForm.value;
-          this.postService.createPost(newPost, this.token).subscribe(
+          const formData = new FormData(); // Usamos FormData para enviar archivos
+          formData.append('title', this.postForm.get('title')?.value);
+          formData.append('content', this.postForm.get('content')?.value);
+          if (this.selectedImage) {
+            formData.append('image', this.selectedImage); // Añadimos la imagen si está seleccionada
+          }
+
+          this.postService.createPost(formData).subscribe(
             (post: Post) => {
               this.posts.push(post);
 
-              // Reinicia el formulario
+              // Reinicia el formulario q
               this.postForm.reset({
                 title: '',
                 content: '',
+                image: '',
               });
 
               // Marca los controles como limpios y sin toques
               this.postForm.get('title')?.setErrors(null);
               this.postForm.get('content')?.setErrors(null);
+              this.postForm.get('image')?.setErrors(null);
 
               this.postForm.markAsPristine();
               this.postForm.markAsUntouched();

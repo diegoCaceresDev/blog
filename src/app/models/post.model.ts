@@ -5,4 +5,5 @@ export interface Post {
   title: string;
   content: string;
   author?: User;
+  imageUrl?: string; // Añadimos el campo de imagen opcional
 }

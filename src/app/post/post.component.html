@@ -2,25 +2,44 @@
 
 <h2>Create a Post</h2>
 <form [formGroup]="postForm" (ngSubmit)="createPost()">
-  <mat-form-field appearance="fill">
-    <mat-label>Title</mat-label>
-    <input matInput formControlName="title" />
-    <mat-error *ngIf="postForm.get('title')?.hasError('required')">
-      Title is required
-    </mat-error>
-  </mat-form-field>
+  <!-- Campo para el título -->
+  <div class="form-group">
+    <label for="title">Título</label>
+    <input
+      type="text"
+      id="title"
+      formControlName="title"
+      placeholder="Título del post"
+      class="form-control"
+    />
+  </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Content</mat-label>
-    <textarea matInput formControlName="content" rows="4"></textarea>
-    <mat-error *ngIf="postForm.get('content')?.hasError('required')">
-      Content is required
-    </mat-error>
-  </mat-form-field>
+  <!-- Campo para el contenido -->
+  <div class="form-group">
+    <label for="content">Contenido</label>
+    <textarea
+      id="content"
+      formControlName="content"
+      placeholder="Contenido"
+      class="form-control"
+    ></textarea>
+  </div>
 
-  <button mat-raised-button color="primary" type="submit">Create Post</button>
+  <!-- Campo para subir imagen -->
+  <div class="form-group">
+    <label for="image">Subir imagen</label>
+    <input
+      type="file"
+      id="image"
+      (change)="onFileChange($event)"
+      class="form-control"
+    />
+  </div>
+
+  <!-- Botón para crear el post -->
+  <button type="submit" class="btn btn-primary">Crear Post</button>
 </form>
-
+<br />
 <mat-card>
   <mat-card-header>
     <mat-card-title><h2>Posts</h2></mat-card-title>
@@ -36,46 +55,56 @@
       </mat-form-field>
     </mat-card-subtitle>
   </mat-card-header>
+
   <mat-card-content>
-    <div *ngIf="posts.length > 0">
-      <div class="post-container" *ngFor="let post of posts">
-        <h2>{{ post.title }}</h2>
-        <p>{{ post.content }}</p>
-        <small
-          >Author: {{ post.author?.nombre }} {{ post.author?.apellido }}</small
-        >
+    <div *ngFor="let post of posts" class="post-container">
+      <h2>{{ post.title }}</h2>
+      <p>{{ post.content }}</p>
+      <small
+        >Author: {{ post.author?.nombre }} {{ post.author?.apellido }}</small
+      >
 
-        <!-- Botón para ver detalles -->
-        <button
-          mat-raised-button
-          color="primary"
-          [routerLink]="['/post', post.id]"
-          class="details-button"
-        >
-          Ver Detalles
-        </button>
-
-        <button
-          *ngIf="post.author?.id === userId"
-          mat-icon-button
-          color="warn"
-          class="delete-button"
-          (click)="deletePost(post.id)"
-        >
-          <mat-icon>delete</mat-icon>
-        </button>
+      <!-- Mostrar la imagen si está disponible -->
+      <div class="post-image-container">
+        <img
+          *ngIf="post.imageUrl"
+          [src]="'http://localhost:3000/images/' + post.imageUrl"
+          alt="{{ post.title }}"
+          class="post-image"
+        />
       </div>
 
-      <mat-paginator
-        [length]="totalPosts"
-        [pageSize]="limit"
-        [pageSizeOptions]="[5, 10, 20]"
-        (page)="onPageChange($event)"
+      <!-- Botón para ver detalles -->
+      <button
+        mat-raised-button
+        color="primary"
+        [routerLink]="['/post', post.id]"
+        class="details-button"
       >
-      </mat-paginator>
+        Ver Detalles
+      </button>
+
+      <button
+        *ngIf="post.author?.id === userId"
+        mat-icon-button
+        color="warn"
+        class="delete-button"
+        (click)="deletePost(post.id)"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
     </div>
+
     <div *ngIf="posts.length === 0">
       <p>No posts available.</p>
     </div>
+    <!-- Paginador -->
+    <mat-paginator
+      [length]="totalPosts"
+      [pageSize]="limit"
+      [pageSizeOptions]="[5, 10, 25]"
+      (page)="onPageChange($event)"
+    >
+    </mat-paginator>
   </mat-card-content>
 </mat-card>
