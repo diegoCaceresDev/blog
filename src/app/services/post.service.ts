@@ -22,6 +22,21 @@ export class PostService {
     });
   }
 
+  // Servicio para actualizar el post con una imagen
+  updatePost(
+    postId: number,
+    formData: FormData,
+    token: string
+  ): Observable<Post> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.put<Post>(`${this.apiUrl}/posts/${postId}`, formData, {
+      headers,
+    });
+  }
+
   getAllPosts(
     page: number = 1,
     limit: number = 10,

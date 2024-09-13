@@ -39,6 +39,9 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   comments: any[] = [];
   commentForm: FormGroup;
   token: string = '';
+  editForm: FormGroup; // Formulario para editar el post
+  isEditing: boolean = false; // Estado de edición
+  selectedImage: File | null = null; // Para manejar la imagen seleccionada
 
   constructor(
     private fb: FormBuilder,
@@ -50,6 +53,11 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   ) {
     this.commentForm = this.fb.group({
       content: ['', Validators.required],
+    });
+    this.editForm = this.fb.group({
+      title: ['', Validators.required],
+      content: ['', Validators.required],
+      imageUrl: [''], // Campo para la imagen (puede no ser obligatorio)
     });
   }
 
@@ -87,6 +95,50 @@ export class PostDetailComponent implements OnInit, OnDestroy {
         console.error('Error fetching post:', error);
       }
     );
+  }
+
+  onFileChange(event: any): void {
+    const file = event.target.files[0];
+    if (file) {
+      this.selectedImage = file; // Guarda la imagen seleccionada
+    }
+  }
+
+  // Activar el modo de edición
+  toggleEdit(): void {
+    this.isEditing = !this.isEditing;
+  }
+
+  // Actualizar el post
+  updatePost(): void {
+    if (this.editForm.valid) {
+      const updatedPost = this.editForm.value;
+
+      // Crear un objeto FormData para enviar tanto el post como la imagen
+      const formData = new FormData();
+      formData.append('title', updatedPost.title);
+      formData.append('content', updatedPost.content);
+
+      // Si se seleccionó una imagen, agregarla al FormData
+      if (this.selectedImage) {
+        formData.append('image', this.selectedImage);
+      }
+
+      this.postService
+        .updatePost(this.post.id, formData, this.token)
+        .subscribe({
+          next: (response) => {
+            this.post = response;
+            this.isEditing = false; // Desactivar el modo edición después de actualizar
+          },
+          error: (error) => {
+            console.error('Error updating post:', error);
+          },
+          complete: () => {
+            console.log('Post update complete');
+          },
+        });
+    }
   }
 
   loadComments(postId: number): void {
