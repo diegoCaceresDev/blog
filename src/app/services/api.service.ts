@@ -21,7 +21,7 @@ interface ValidationResponse {
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'http://api.diegocaceres.online';
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 

@@ -8,7 +8,7 @@ import { CreatePostDto } from '../models/create-post.dto';
   providedIn: 'root',
 })
 export class PostService {
-  private apiUrl = 'http://localhost:3000';
+  private apiUrl = 'http://api.diegocaceres.online';
 
   constructor(private http: HttpClient) {}
 
