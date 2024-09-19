@@ -8,6 +8,7 @@ import { CreatePostDto } from '../models/create-post.dto';
 import { Post } from '../models/post.model';
 import { User } from '../models/user.model';
 import { CommentSocketService } from './comment-socket.service';
+import { environment } from '../../environments/environment'; // Importa el archivo de entorno
 
 interface TokenResponse {
   token: string;
@@ -21,7 +22,7 @@ interface ValidationResponse {
   providedIn: 'root',
 })
 export class ApiService {
-  private apiUrl = 'https://api.diegocaceres.online';
+  private apiUrl = environment.apiUrl;
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 

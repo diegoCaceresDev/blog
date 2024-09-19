@@ -9,6 +9,7 @@ import { SocketIoModule } from 'ngx-socket-io';
 import { authInterceptor } from './auth.interceptor';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
+import { environment } from '../environments/environment';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([authInterceptor])),
     importProvidersFrom(
       SocketIoModule.forRoot({
-        url: 'http://localhost:3000', // URL sin token
+        url: environment.apiUrl, // URL sin token
         options: { transports: ['websocket'] }, // Sin token aquí
       })
     ),

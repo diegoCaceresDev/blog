@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Post } from '../models/post.model';
 import { CreatePostDto } from '../models/create-post.dto';
+import { environment } from '../../environments/environment'; // Importa el archivo de entorno
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
-  private apiUrl = 'https://api.diegocaceres.online';
+  private apiUrl = environment.apiUrl;
 
   constructor(private http: HttpClient) {}
 
