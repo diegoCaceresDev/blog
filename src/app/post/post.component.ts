@@ -23,6 +23,7 @@ import { MatIconModule } from '@angular/material/icon'; // Asegúrate de importa
 import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
 import { MatPaginatorModule } from '@angular/material/paginator'; // Importa MatPaginatorModule
+import { environment } from '../../environments/environment'; // Importa el archivo de entorno
 
 @Component({
   selector: 'app-post',

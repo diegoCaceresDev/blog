@@ -27,7 +27,7 @@
     <div *ngIf="!isEditing">
       <img
         *ngIf="post.imageUrl"
-        [src]="'http://localhost:3000/images/' + post.imageUrl"
+        [src]="'https://api.diegocaceres.online/' + post.imageUrl"
         alt="{{ post.title }}"
         class="post-image"
       />
