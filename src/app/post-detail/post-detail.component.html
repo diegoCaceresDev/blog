@@ -27,7 +27,7 @@
     <div *ngIf="!isEditing">
       <img
         *ngIf="post.imageUrl"
-        [src]="'https://api.diegocaceres.online/' + post.imageUrl"
+        [src]="apiUrl + '/' + post.imageUrl"
         alt="{{ post.title }}"
         class="post-image"
       />
@@ -69,7 +69,13 @@
     </div>
   </div>
   <div class="post-actions" *ngIf="!isEditing">
-    <button (click)="toggleEdit()" class="btn btn-primary">Editar</button>
+    <button
+      (click)="toggleEdit()"
+      *ngIf="post.author?.id === userId"
+      class="btn btn-primary"
+    >
+      Editar
+    </button>
     <button [routerLink]="['/dashboard']" class="btn btn-secondary">
       Volver
     </button>

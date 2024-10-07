@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://api.diegocaceres.online', // Aquí define la URL de tu API
+  apiUrl: 'http://localhost:3000', // Aquí define la URL de tu API
 };

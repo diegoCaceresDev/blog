@@ -15,7 +15,7 @@ export class CommentService {
   // Obtener comentarios por postId con el token en la cabecera
   getCommentsByPostId(postId: number, token: string): Observable<Comment[]> {
     const headers = { Authorization: `Bearer ${token}` };
-    return this.http.get<any[]>(`${this.apiUrl}/post/${postId}`, {
+    return this.http.get<any[]>(`${this.apiUrl}/comments/post/${postId}`, {
       headers,
     });
   }

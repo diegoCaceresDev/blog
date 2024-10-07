@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { CommentService } from '../services/comments.service';
 import { formatDistanceToNow } from 'date-fns'; // Importar date-fns
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-post-detail',
@@ -42,6 +43,8 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   editForm: FormGroup; // Formulario para editar el post
   isEditing: boolean = false; // Estado de edición
   selectedImage: File | null = null; // Para manejar la imagen seleccionada
+  apiUrl = environment.apiUrl;
+  userId: number = 0;
 
   constructor(
     private fb: FormBuilder,
@@ -63,6 +66,9 @@ export class PostDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     const token = localStorage.getItem('token');
+    const userIdFromStorage = localStorage.getItem('userId');
+    this.userId = userIdFromStorage ? +userIdFromStorage : 0; // Usa 0 si userIdFromStorage es null
+
     this.token = token !== null ? token : ''; // Garantizar que 'this.token' sea siempre una cadena
 
     if (this.token) {

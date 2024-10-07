@@ -58,6 +58,7 @@ export class PostComponent implements OnInit {
   selectedOption: string = 'all';
   page: number = 1;
   limit: number = 10;
+  apiUrl = environment.apiUrl;
 
   constructor(
     private postService: PostService,
@@ -69,6 +70,7 @@ export class PostComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.apiUrl);
     this.token = localStorage.getItem('token') || '';
     const userIdFromStorage = localStorage.getItem('userId');
     this.userId = userIdFromStorage ? +userIdFromStorage : 0; // Usa 0 si userIdFromStorage es null
@@ -78,7 +80,6 @@ export class PostComponent implements OnInit {
       this.router.navigate(['/login']); // Redirige al login si no hay token o userId
       return;
     }
-    this.apiService.checkToken(this.token); // Valida el token al iniciar
     this.getUserData();
     this.getPosts();
   }
