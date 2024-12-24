@@ -53,6 +53,14 @@ export class ApiService {
       );
   }
 
+  createSuperUser(userData: {
+    username: string;
+    email: string;
+    password: string;
+  }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/create-superuser`, userData);
+  }
+
   login(loginDto: LoginDto): Observable<any> {
     return this.http
       .post(`${this.apiUrl}/auth/login`, loginDto, {
@@ -60,14 +68,15 @@ export class ApiService {
       })
       .pipe(
         tap((response: any) => {
-          if (response.token) {
+          if (response.access_token) {
             localStorage.setItem('token', response.token);
-            this.updateAuthenticationStatus(true);
-            this.webSocketService.connect(); // Reconectar WebSocket con el nuevo token
+            this.updateAuthenticationStatus(true); // Actualiza el estado de autenticación
+            this.webSocketService.connect(); // Conecta el servicio de WebSocket con el nuevo token
           }
         }),
         catchError((error) => {
           console.error('Login error:', error);
+          this.updateAuthenticationStatus(false); // Asegúrate de actualizar el estado en caso de error
           return throwError(error);
         })
       );
@@ -158,5 +167,8 @@ export class ApiService {
   // Método para actualizar el estado de autenticación
   private updateAuthenticationStatus(isAuthenticated: boolean): void {
     this.isAuthenticatedSubject.next(isAuthenticated);
+    console.log(this.isAuthenticatedSubject);
+    console.log(this.isAuthenticated$);
+    console.log(isAuthenticated);
   }
 }

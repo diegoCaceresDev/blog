@@ -1,0 +1,66 @@
+/* confirm-dialog.component.css */
+
+/* Estilo general para el diálogo */
+mat-dialog-container {
+  padding: 24px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  color: #333333;
+  font-family: Arial, sans-serif;
+}
+
+/* Estilo para el título */
+h1[mat-dialog-title] {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+  margin-left: 5%;
+  padding: 0 0 16px;
+  color: #333333;
+  border-bottom: 1px solid #eeeeee;
+}
+
+/* Contenido del diálogo */
+div[mat-dialog-content] {
+  font-size: 16px;
+  margin: 16px 0;
+  color: #666666;
+}
+
+/* Acciones del diálogo */
+div[mat-dialog-actions] {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px; /* Espaciado entre botones */
+}
+
+/* Botón cancelar */
+button[mat-button] {
+  font-size: 14px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-transform: uppercase;
+}
+
+/* Estilo para el botón de cancelar */
+button[mat-button]:first-child {
+  background-color: #f5f5f5;
+  color: #666666;
+  transition: background-color 0.3s;
+}
+
+button[mat-button]:first-child:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estilo para el botón de confirmar */
+button[mat-button]:last-child {
+  background-color: #4caf50;
+  color: #ffffff;
+  transition: background-color 0.3s;
+}
+
+button[mat-button]:last-child:hover {
+  background-color: #43a047;
+}

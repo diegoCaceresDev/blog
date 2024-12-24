@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { Observable } from 'rxjs';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -20,13 +20,16 @@ export class NavbarComponent implements OnInit {
   constructor(
     private apiService: ApiService, // Usa ApiService aquí
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private cdr: ChangeDetectorRef // Inyecta ChangeDetectorRef
   ) {
     this.isAuthenticated$ = this.apiService.isAuthenticated$; // Usa isAuthenticated$ de ApiService
   }
 
   ngOnInit(): void {
-    this.isAuthenticated$.subscribe((isAuthenticated) => {});
+    this.isAuthenticated$.subscribe((isAuthenticated) => {
+      console.log('Authenticated status:', isAuthenticated); // Verifica si este mensaje se imprime // Fuerza la detección de cambios
+    });
   }
 
   logout(): void {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { PostService } from '../services/post.service';
 import {
   ReactiveFormsModule,
@@ -24,6 +24,7 @@ import { ApiService } from '../services/api.service';
 import { User } from '../models/user.model';
 import { MatPaginatorModule } from '@angular/material/paginator'; // Importa MatPaginatorModule
 import { environment } from '../../environments/environment'; // Importa el archivo de entorno
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-post',
@@ -41,6 +42,7 @@ import { environment } from '../../environments/environment'; // Importa el arch
     MatIconModule,
     MatPaginatorModule,
     RouterModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './post.component.html',
   styleUrls: ['./post.component.css'],
@@ -54,11 +56,17 @@ export class PostComponent implements OnInit {
   token: string = '';
   userId: number = 0;
   userName: string = '';
+  userRole: string = '';
   userLastName: string = '';
   selectedOption: string = 'all';
   page: number = 1;
   limit: number = 10;
   apiUrl = environment.apiUrl;
+  loading = false;
+
+  likeCount: number = 0;
+  dislikeCount: number = 0;
+  userReaction: 'like' | 'dislike' | null = null;
 
   constructor(
     private postService: PostService,
@@ -66,11 +74,11 @@ export class PostComponent implements OnInit {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private apiService: ApiService // Asegúrate de tener un servicio para obtener información del usuario
+    private apiService: ApiService, // Asegúrate de tener un servicio para obtener información del usuario
+    private cdr: ChangeDetectorRef // Inyecta el servicio ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    console.log(this.apiUrl);
     this.token = localStorage.getItem('token') || '';
     const userIdFromStorage = localStorage.getItem('userId');
     this.userId = userIdFromStorage ? +userIdFromStorage : 0; // Usa 0 si userIdFromStorage es null
@@ -97,6 +105,7 @@ export class PostComponent implements OnInit {
       (user: User) => {
         this.userName = user.nombre;
         this.userLastName = user.apellido;
+        this.userRole = user.role;
       },
       (error) => {
         console.error('Error al obtener los datos del usuario', error);
@@ -152,6 +161,8 @@ export class PostComponent implements OnInit {
 
   createPost(): void {
     if (this.postForm.valid) {
+      this.loading = true;
+
       const dialogRef = this.dialog.open(ConfirmDialogComponent, {
         panelClass: 'custom-dialog-container',
         data: {
@@ -171,6 +182,8 @@ export class PostComponent implements OnInit {
 
           this.postService.createPost(formData).subscribe(
             (post: Post) => {
+              this.loading = false;
+
               this.posts.push(post);
 
               // Reinicia el formulario q
@@ -194,10 +207,10 @@ export class PostComponent implements OnInit {
               });
             },
             (error) => {
-              console.error('Error al crear el post', error);
-              this.snackBar.open('Error al crear el post', 'Cerrar', {
-                duration: 5000,
-              });
+              this.loading = false;
+              console.log(error);
+
+              this.handleError(error);
             }
           );
         }
@@ -228,6 +241,57 @@ export class PostComponent implements OnInit {
           }
         );
       }
+    });
+  }
+
+  onReactToPost(post: Post, reaction: 'like' | 'dislike') {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert('Debes iniciar sesión para reaccionar.');
+      return;
+    }
+
+    this.postService.reactToPost(post.id, reaction, token).subscribe({
+      next: (response: any) => {
+        console.log('Respuesta completa del backend:', response);
+
+        const updatedPost = response.data; // Extrae los datos desde "data"
+        post.likeCount = updatedPost.likeCount;
+        post.dislikeCount = updatedPost.dislikeCount;
+        post.userReaction = reaction; // Actualiza la reacción del usuario actual
+      },
+      error: (err) => {
+        console.error('Error al reaccionar al post:', err);
+        this.snackBar.open(
+          'Ocurrió un error al intentar reaccionar.',
+          'Cerrar',
+          {
+            duration: 5000,
+            panelClass: ['red-snackbar'],
+          }
+        );
+      },
+      complete: () => {
+        this.cdr.markForCheck();
+        console.log('Reacción procesada correctamente');
+      },
+    });
+
+    console.log(post);
+  }
+
+  handleError(error: any): void {
+    // Asegúrate de que `error.messages` contenga los mensajes esperados
+    const messages: string[] = error?.messages || [
+      'An unexpected error occurred',
+    ];
+
+    // Muestra cada mensaje en un snackBar
+    messages.forEach((message) => {
+      this.snackBar.open(message, 'Cerrar', {
+        duration: 5000,
+        panelClass: ['red-snackbar'],
+      });
     });
   }
 }

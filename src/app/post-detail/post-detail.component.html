@@ -97,9 +97,6 @@
           formControlName="content"
           placeholder="Escribe tu comentario..."
         ></textarea>
-        <mat-error *ngIf="commentForm.get('content')?.hasError('required')">
-          El comentario no puede estar vacío
-        </mat-error>
       </mat-form-field>
       <button
         mat-raised-button

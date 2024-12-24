@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { catchError, Observable, of, throwError } from 'rxjs';
 import { Post } from '../models/post.model';
 import { CreatePostDto } from '../models/create-post.dto';
 import { environment } from '../../environments/environment'; // Importa el archivo de entorno
@@ -14,13 +18,38 @@ export class PostService {
   constructor(private http: HttpClient) {}
 
   createPost(formData: FormData): Observable<Post> {
-    const token = localStorage.getItem('token'); // Asegúrate de tener el token disponible
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('Token not found. Please log in.'));
+    }
 
-    return this.http.post<Post>(`${this.apiUrl}/posts`, formData, {
-      headers: new HttpHeaders({
-        Authorization: `Bearer ${token}`,
-      }),
-    });
+    return this.http
+      .post<Post>(`${this.apiUrl}/posts`, formData, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+        }),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => this.handleError(error)) // Llamamos a la función con el error completo
+      );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage: string | string[] = 'An unexpected error occurred';
+
+    if (error.error?.message) {
+      // Si el servidor envió un array de mensajes, lo usamos tal cual
+      errorMessage = Array.isArray(error.error.message)
+        ? error.error.message
+        : [error.error.message];
+    } else if (error.status === 401) {
+      errorMessage = ['Unauthorized. Please log in again.'];
+    } else if (error.status === 404) {
+      errorMessage = ['Resource not found.'];
+    }
+
+    // Lanza el error completo para que el componente lo maneje
+    return throwError(() => ({ messages: errorMessage, status: error.status }));
   }
 
   // Servicio para actualizar el post con una imagen
@@ -52,12 +81,19 @@ export class PostService {
     );
   }
 
-  getPostById(postId: number, token: string): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`,
-    });
+  getPostById(postId: number): Observable<Post> {
+    const token = this.getToken();
+    if (!token) {
+      return throwError(() => new Error('Token not found. Please log in.'));
+    }
 
-    return this.http.get(`${this.apiUrl}/posts/${postId}`, { headers });
+    return this.http
+      .get<Post>(`${this.apiUrl}/posts/${postId}`, {
+        headers: new HttpHeaders({
+          Authorization: `Bearer ${token}`,
+        }),
+      })
+      .pipe(catchError(this.handleError));
   }
 
   getUserPosts(
@@ -73,6 +109,10 @@ export class PostService {
       `${this.apiUrl}/posts/user/${userId}?page=${page}&limit=${limit}`,
       { headers } // Incluye los encabezados con el token
     );
+  }
+
+  private getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
   validateToken(): Observable<{ valid: boolean }> {
@@ -99,6 +139,24 @@ export class PostService {
       Authorization: `Bearer ${token}`,
     });
     return this.http.delete<void>(`${this.apiUrl}/posts/${postId}`, {
+      headers,
+    });
+  }
+
+  reactToPost(
+    postId: number,
+    reaction: 'like' | 'dislike',
+    token: string
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    const body = {
+      type: reaction, // 'like' o 'dislike'
+    };
+
+    return this.http.post(`${this.apiUrl}/posts/${postId}/reactions`, body, {
       headers,
     });
   }

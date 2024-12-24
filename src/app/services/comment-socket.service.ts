@@ -14,7 +14,6 @@ export class CommentSocketService {
     if (token) {
       this.socket.ioSocket.io.opts.query = { token }; // Configurar el token en la consulta
       this.socket.connect(); // Conectar solo si el token está disponible
-      console.log('WebSocket conectado con token:', token);
     } else {
       console.error('Token no disponible para conectar WebSocket');
     }
@@ -22,7 +21,18 @@ export class CommentSocketService {
 
   // Emitir el evento para crear un comentario
   createComment(postId: number, content: string) {
+    if (!postId || !content || content.trim().length < 10) {
+      console.error(
+        'Invalid comment data: Post ID and content are required, and content must be at least 10 characters.'
+      );
+      alert('El comentario debe tener al menos 10 caracteres.');
+      return;
+    }
     this.socket.emit('createComment', { postId, content });
+  }
+
+  onError(): Observable<string> {
+    return this.socket.fromEvent<string>('error');
   }
 
   // Escuchar los comentarios creados en tiempo real

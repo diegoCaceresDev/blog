@@ -6,6 +6,7 @@ import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
   selector: 'app-confirm-dialog',
   standalone: true,
   imports: [MatButtonModule, MatDialogModule],
+  styleUrls: ['./confirm-dialog.css'],
   template: `
     <h1 mat-dialog-title>{{ title }}</h1>
     <div mat-dialog-content>

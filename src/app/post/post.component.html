@@ -1,6 +1,8 @@
 <h1>Welcome {{ userName }} {{ userLastName }}</h1>
 
 <h2>Create a Post</h2>
+<mat-spinner *ngIf="loading"></mat-spinner>
+
 <form [formGroup]="postForm" (ngSubmit)="createPost()">
   <!-- Campo para el título -->
   <div class="form-group">
@@ -84,8 +86,56 @@
         Ver Detalles
       </button>
 
+      <!-- Botones para reaccionar -->
+      <!-- Reacciones de Like y Dislike -->
+      <div class="reaction-container">
+        <button
+          mat-button
+          class="like-button"
+          [class.active]="post.userReaction === 'like'"
+          (click)="onReactToPost(post, 'like')"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              width="24px"
+              height="24px"
+            >
+              <path
+                d="M9 22h9a3 3 0 0 0 3-3v-7a3 3 0 0 0-3-3h-5.586l.793-3.707a3 3 0 0 0-2.942-3.581H9.008a1 1 0 0 0-.992.88L7 12v9a1 1 0 0 0 1 1Zm-6-3h3V10H3a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1Z"
+              />
+            </svg>
+          </span>
+          Like {{ post.likeCount || 0 }}
+        </button>
+
+        <button
+          mat-button
+          class="dislike-button"
+          [class.active]="post.userReaction === 'dislike'"
+          (click)="onReactToPost(post, 'dislike')"
+        >
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              width="24px"
+              height="24px"
+            >
+              <path
+                d="M15 2H6a3 3 0 0 0-3 3v7a3 3 0 0 0 3 3h5.586l-.793 3.707a3 3 0 0 0 2.942 3.581h1.543a1 1 0 0 0 .992-.88L17 12V3a1 1 0 0 0-1-1Zm6 3h-3v9h3a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1Z"
+              />
+            </svg>
+          </span>
+          Dislike {{ post.dislikeCount || 0 }}
+        </button>
+      </div>
+
       <button
-        *ngIf="post.author?.id === userId"
+        *ngIf="post.author?.id === userId || userRole === 'superuser'"
         mat-icon-button
         color="warn"
         class="delete-button"

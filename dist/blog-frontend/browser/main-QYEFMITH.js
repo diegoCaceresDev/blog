@@ -8936,7 +8936,7 @@ var Ht = (() => {
   let n = t;
   return n;
 })();
-var le = { production: !1, apiUrl: "https://api.diegocaceres.online" };
+var le = { production: !1, apiUrl: "http://localhost:3000" };
 var gl = {};
 nd(gl, {
   Manager: () => $i,

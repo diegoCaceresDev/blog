@@ -18,6 +18,7 @@ import { MatInputModule } from '@angular/material/input';
 import { CommentService } from '../services/comments.service';
 import { formatDistanceToNow } from 'date-fns'; // Importar date-fns
 import { environment } from '../../environments/environment';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-post-detail',
@@ -30,6 +31,7 @@ import { environment } from '../../environments/environment';
     CommonModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
   ],
   templateUrl: './post-detail.component.html',
@@ -52,11 +54,20 @@ export class PostDetailComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private commentService: CommentService,
-    private commentSocketService: CommentSocketService // Servicio WebSocket
+    private commentSocketService: CommentSocketService, // Servicio WebSocket
+    private snackBar: MatSnackBar // Inyectar MatSnackBar
   ) {
     this.commentForm = this.fb.group({
-      content: ['', Validators.required],
+      content: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(1),
+          Validators.maxLength(300),
+        ],
+      ],
     });
+
     this.editForm = this.fb.group({
       title: ['', Validators.required],
       content: ['', Validators.required],
@@ -67,12 +78,25 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const token = localStorage.getItem('token');
     const userIdFromStorage = localStorage.getItem('userId');
-    this.userId = userIdFromStorage ? +userIdFromStorage : 0; // Usa 0 si userIdFromStorage es null
+    this.userId = userIdFromStorage ? +userIdFromStorage : 0;
 
-    this.token = token !== null ? token : ''; // Garantizar que 'this.token' sea siempre una cadena
+    this.token = token !== null ? token : '';
 
     if (this.token) {
-      this.commentSocketService.connect(); // Conectar solo si el token está disponible
+      this.commentSocketService.connect();
+
+      this.commentSocketService
+        .onCommentCreated()
+        .subscribe((newComment: any) => {
+          this.comments.unshift(newComment);
+        });
+
+      this.commentSocketService.onError().subscribe((error) => {
+        this.snackBar.open(error, 'Cerrar', {
+          duration: 5000,
+          panelClass: ['red-snackbar'],
+        });
+      });
     }
 
     this.route.paramMap.subscribe((params) => {
@@ -82,20 +106,10 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   }
 
   loadPost(postId: number): void {
-    this.postService.getPostById(postId, this.token).subscribe(
+    this.postService.getPostById(postId).subscribe(
       (post: Post) => {
         this.post = post;
-        this.loadComments(postId); // Cargar los comentarios cuando el post esté disponible
-        this.commentSocketService
-          .onCommentCreated()
-          .subscribe((newComment: Comment) => {
-            this.comments.unshift(newComment); // Añadir al inicio y ordenar
-            this.comments.sort(
-              (a, b) =>
-                new Date(b.createdAt).getTime() -
-                new Date(a.createdAt).getTime()
-            );
-          });
+        this.loadComments(postId);
       },
       (error) => {
         console.error('Error fetching post:', error);
@@ -113,6 +127,14 @@ export class PostDetailComponent implements OnInit, OnDestroy {
   // Activar el modo de edición
   toggleEdit(): void {
     this.isEditing = !this.isEditing;
+
+    if (this.isEditing) {
+      // Establecer valores actuales del post en el formulario
+      this.editForm.patchValue({
+        title: this.post.title,
+        content: this.post.content,
+      });
+    }
   }
 
   // Actualizar el post
@@ -164,6 +186,15 @@ export class PostDetailComponent implements OnInit, OnDestroy {
       const postId = this.post.id;
       this.commentSocketService.createComment(postId, content);
       this.commentForm.reset(); // Limpiar el formulario después de enviar el comentario
+    } else {
+      this.snackBar.open(
+        'El comentario debe tener al menos 1 caracteres.',
+        'Cerrar',
+        {
+          duration: 5000,
+          panelClass: ['red-snackbar'],
+        }
+      );
     }
   }
 

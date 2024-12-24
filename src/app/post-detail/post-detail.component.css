@@ -162,6 +162,102 @@ body {
 .comment-date {
   float: right;
   color: #bbb;
+} /* Contenedor de comentarios */
+.comments-section {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 800px;
+  overflow-wrap: break-word; /* Asegura que el texto largo no se salga del contenedor */
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Título de comentarios */
+.comments-section mat-card-title {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+  font-weight: bold;
+  border-bottom: 1px solid #eeeeee;
+  padding-bottom: 8px;
+}
+
+/* Contenido de comentarios */
+.comments-content {
+  margin-top: 20px;
+}
+
+.comment {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow-wrap: break-word; /* Asegura que las palabras largas se ajusten al contenedor */
+  word-wrap: break-word;
+  word-break: break-word;
+}
+
+.comment p {
+  font-size: 1rem;
+  color: #555;
+  margin-bottom: 8px;
+  line-height: 1.6; /* Mejora la legibilidad */
+  white-space: pre-wrap; /* Respeta los saltos de línea */
+}
+
+.comment small {
+  font-size: 0.85rem;
+  color: #999;
+  display: block;
+  margin-top: 5px;
+}
+
+.comment-date {
+  float: right;
+  color: #bbb;
+}
+
+/* Botón para acciones futuras */
+.comment-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.comment-actions button {
+  padding: 5px 10px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+/* Botón eliminar */
+.comment-actions .btn-delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.comment-actions .btn-delete:hover {
+  background-color: #c82333;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .comments-section {
+    padding: 15px;
+    margin: 10px;
+  }
+
+  .comment p {
+    font-size: 0.9rem;
+  }
 }
 
 /* Responsivo para dispositivos pequeños */
@@ -195,4 +291,19 @@ body {
   .comments-section h3 {
     font-size: 1.25rem;
   }
+}
+
+.green-snackbar {
+  background-color: #4caf50 !important;
+  color: #ffffff;
+}
+
+.red-snackbar {
+  background-color: #f44336 !important;
+  color: #ffffff;
+}
+
+.mat-error {
+  font-size: 0.875rem;
+  color: #f44336 !important;
 }

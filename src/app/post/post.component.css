@@ -227,3 +227,23 @@ ul {
   height: auto; /* Mantiene la relación de aspecto original de la imagen */
   object-fit: cover; /* Asegura que la imagen cubra el contenedor sin distorsionarse */
 }
+
+.green-snackbar {
+  background-color: #4caf50 !important;
+  color: #ffffff;
+}
+
+.red-snackbar {
+  background-color: #f44336 !important;
+  color: #ffffff;
+}
+
+.like-button.active {
+  color: #007bff; /* Color para el botón activo */
+  font-weight: bold;
+}
+
+.dislike-button.active {
+  color: #dc3545; /* Color para el botón activo */
+  font-weight: bold;
+}
