@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/login/login.component.css"],
+  "sourcesContent": ["/* A\u00F1ade m\u00E1rgenes a los elementos del formulario */\r\nmat-form-field {\r\n  margin-bottom: 16px; /* Ajusta el margen inferior de los campos de formulario */\r\n}\r\n\r\nbutton {\r\n  margin-top: 16px; /* Ajusta el margen superior del bot\u00F3n */\r\n}\r\n\r\n/* Alinea el mat-card al centro de la p\u00E1gina */\r\nmat-card {\r\n  display: flex;\r\n  flex-direction: column;\r\n  align-items: center;\r\n  max-width: 400px; /* Ancho m\u00E1ximo del card */\r\n  margin: 100px auto; /* Centra el card horizontalmente */\r\n  padding: 16px; /* Padding interno del card */\r\n  border: 1px solid #e0e0e0; /* Borde con un color gris claro */\r\n  border-radius: 8px; /* Bordes redondeados */\r\n  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */\r\n}\r\n\r\n/* Ajusta el tama\u00F1o del mat-card-title */\r\nmat-card-title {\r\n  margin-bottom: 16px; /* Margen inferior del t\u00EDtulo del card */\r\n}\r\n\r\nmat-form-field {\r\n  width: 100%;\r\n}\r\n"],
+  "mappings": ";AACA;AACE,iBAAe;AACjB;AAEA;AACE,cAAY;AACd;AAGA;AACE,WAAS;AACT,kBAAgB;AAChB,eAAa;AACb,aAAW;AACX,UAAQ,MAAM;AACd,WAAS;AACT,UAAQ,IAAI,MAAM;AAClB,iBAAe;AACf,cAAY,EAAE,IAAI,IAAI,KAAK,CAAC,EAAE,CAAC,EAAE,CAAC,EAAE;AACtC;AAGA;AACE,iBAAe;AACjB;AAEA;AACE,SAAO;AACT;",
+  "names": []
+}

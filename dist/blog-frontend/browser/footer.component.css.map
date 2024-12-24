@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/components/footer/footer.component.css"],
+  "sourcesContent": [".footer-toolbar {\r\n  position: fixed;\r\n  bottom: 0;\r\n  width: 100%;\r\n  text-align: center;\r\n  padding: 10px 0;\r\n  background: #3f51b5; /* Mat color primary default */\r\n  color: white;\r\n  font-size: 14px;\r\n  z-index: 1000; /* Ensure it stays above other content */\r\n}\r\n\r\n.spacer {\r\n  flex: 1 1 auto;\r\n}\r\n\r\n.footer-toolbar nav a {\r\n  color: white;\r\n  margin: 0 10px;\r\n  font-size: 14px;\r\n  text-transform: uppercase;\r\n  font-weight: 500;\r\n}\r\n"],
+  "mappings": ";AAAA,CAAC;AACC,YAAU;AACV,UAAQ;AACR,SAAO;AACP,cAAY;AACZ,WAAS,KAAK;AACd,cAAY;AACZ,SAAO;AACP,aAAW;AACX,WAAS;AACX;AAEA,CAAC;AACC,QAAM,EAAE,EAAE;AACZ;AAEA,CAhBC,eAgBe,IAAI;AAClB,SAAO;AACP,UAAQ,EAAE;AACV,aAAW;AACX,kBAAgB;AAChB,eAAa;AACf;",
+  "names": []
+}
