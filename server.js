@@ -11,6 +11,14 @@ app.get("*", (req, res) => {
   res.sendFile(
     path.join(__dirname, "dist/blog-frontend/browser", "index.html")
   );
+  console.log(
+    "Ruta del directorio estático: ",
+    path.join(__dirname, "dist/blog-frontend/browser")
+  );
+  console.log(
+    "Ruta del archivo index.html: ",
+    path.join(__dirname, "dist/blog-frontend/browser", "index.html")
+  );
 });
 
 app.listen(port, () => {
