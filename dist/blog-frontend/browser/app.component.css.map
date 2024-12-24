@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/app.component.css"],
-  "sourcesContent": ["/* Aseg\u00FArate de que el contenido principal tenga suficiente altura para empujar el footer hacia abajo */\r\nbody,\r\nhtml {\r\n  margin: 0;\r\n  padding: 0;\r\n  min-height: 100vh;\r\n  display: flex;\r\n  flex-direction: column;\r\n}\r\n\r\n.main-content {\r\n  flex: 1; /* Hace que el contenido principal ocupe el espacio restante */\r\n}\r\n"],
-  "mappings": ";AACA;AACA;AACE,UAAQ;AACR,WAAS;AACT,cAAY;AACZ,WAAS;AACT,kBAAgB;AAClB;AAEA,CAAC;AACC,QAAM;AACR;",
-  "names": []
-}
